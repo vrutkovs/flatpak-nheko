@@ -1,0 +1,35 @@
+---
+language: generic
+
+sudo: required
+
+services:
+  - docker
+
+cache:
+  directories:
+    - .cache
+
+before_script:
+  - git clone -b gh-pages https://github.com/$TRAVIS_REPO_SLUG export/ && cp -rf export/repo . || mkdir export
+
+before_cache:
+  - tar --xattrs --xattrs-include=* -cpf .cache/cache.tar .flatpak-builder/
+
+script:
+  - mkdir -p .cache
+  - "tar --xattrs --xattrs-include=* -xf .cache/cache.tar || true"
+  - docker run --privileged -v ${PWD}:/source -i vrutkovs/flatpak make -C source/
+
+before_deploy:
+  - rm -rf export && mkdir export
+  - cp -rf repo/ export/
+  - cp -rf nheko.flatpakref export/
+
+deploy:
+  provider: pages
+  local_dir: export
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  on:
+    branch: master
