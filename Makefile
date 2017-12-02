@@ -1,5 +1,9 @@
-all: install-deps build prune install-repo
+all: prepare-repo install-deps build prune install-repo
 	flatpak update --user com.github.mujx.Nheko
+
+prepare-repo:
+	[[ -d repo ]] || ostree init --mode=archive-z2 --repo=repo
+	[[ -d repo/refs/remotes ]] || mkdir -p repo/refs/remotes && touch repo/refs/remotes/.gitkeep
 
 install-deps:
 	flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
