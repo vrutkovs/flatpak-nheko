@@ -14,6 +14,7 @@ before_script:
   - git clone -b gh-pages https://github.com/$TRAVIS_REPO_SLUG export/ && cp -rf export/repo . || mkdir export
 
 before_cache:
+  - rm -rf .flatpak-builder/git
   - tar --xattrs --xattrs-include=* -cpf .cache/cache.tar .flatpak-builder/
 
 script:
