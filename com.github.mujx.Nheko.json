@@ -4,6 +4,9 @@
     "runtime": "org.kde.Platform",
     "runtime-version": "5.9",
     "sdk": "org.kde.Sdk",
+    "sdk-extensions": [
+      "org.freedesktop.Sdk.Extension.gcc7"
+    ],
     "command": "nheko",
     "tags": ["nightly"],
     "desktop-file-name-prefix": "(Nightly) ",
@@ -34,10 +37,21 @@
         "cflags": "-O2 -g",
         "cxxflags": "-O2 -g",
         "env": {
-            "V": "1"
+            "V": "1",
+            "CC": "/usr/lib/sdk/gcc7/bin/gcc",
+            "CXX": "/usr/lib/sdk/gcc7/bin/g++",
+            "LD_LIBRARY_PATH": "/usr/lib/sdk/gcc7/lib"
         }
     },
     "modules": [
+        {
+            "name": "gcc7",
+            "buildsystem": "simple",
+            "build-commands": [
+                "mkdir -p /app/lib",
+                "cp -d /usr/lib/sdk/gcc7/lib/lib{gcc_s.so.1,stdc++.so.6*} /app/lib"
+            ]
+        },
         {
             "name": "lmdb",
             "subdir": "libraries/liblmdb",
@@ -59,8 +73,8 @@
                 "sed -i '/GIT_/d' cmake/*.cmake",
                 "sed -i 's@add_library(${LIBRARY_NAME} ${SRC})@add_library(${LIBRARY_NAME} STATIC ${SRC})@g' .third-party/matrix_structs/CMakeLists.txt",
                 "sed -i '/-Werror/d' .third-party/matrix_structs/cmake/CompilerFlags.cmake",
-                "cmake -H. -Bbuild -DCMAKE_BUILD_TYPE=Release",
-                "make -C build -j2"
+                "cmake -H. -GNinja -Bbuild -DCMAKE_BUILD_TYPE=Release",
+                "cmake --build build --config Release"
             ],
             "post-install": [
                 "install -dm755 \"/app/bin\"",
@@ -80,24 +94,24 @@
                  {
                     "type": "git",
                     "url": "https://github.com/mujx/nheko.git",
-                    "branch": "8dc17ccecb55d1957f4b717829777d381e34ab85"
+                    "branch": "master"
                  },
                  {
                     "type": "git",
                     "url": "https://github.com/bendiken/lmdbxx",
-                    "branch": "0b43ca87d8cfabba392dfe884eb1edb83874de02",
+                    "commit": "0b43ca87d8cfabba392dfe884eb1edb83874de02",
                     "dest": ".third-party/lmdbxx"
                  },
                  {
                     "type": "git",
                     "url": "https://github.com/mujx/matrix-structs",
-                    "branch": "7d5d5f7d5f35bc27f168d0f9528844022232281c",
+                    "commit": "91bb2b85a75d664007ef81aeb500d35268425922",
                     "dest": ".third-party/matrix_structs"
                  },
                  {
                     "type": "git",
                     "url": "https://github.com/mobius3/tweeny",
-                    "branch": "b94ce07cfb02a0eb8ac8aaf66137dabdaea857cf",
+                    "commit": "b94ce07cfb02a0eb8ac8aaf66137dabdaea857cf",
                     "dest": ".third-party/tweeny"
                  },
                  {

@@ -6,7 +6,7 @@ prepare-repo:
 
 install-deps:
 	flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-	flatpak --user install flathub org.kde.Platform/x86_64/5.9 org.kde.Sdk/x86_64/5.9
+	flatpak --user install flathub org.kde.Platform/x86_64/5.9 org.kde.Sdk/x86_64/5.9 org.freedesktop.Sdk.Extension.gcc7
 
 build:
 	flatpak-builder --force-clean --ccache --require-changes --repo=repo \
