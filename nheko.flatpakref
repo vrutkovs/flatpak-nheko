@@ -1,0 +1,8 @@
+[Flatpak Ref]
+Title=Unofficial Nheko builds
+Name=com.github.mujx.Nheko
+Branch=master
+Url=https://vrutkovs.github.io/flatpak-nheko/repo
+IsRuntime=False
+RuntimeRepo=https://flathub.org/repo/flathub.flatpakrepo
+Comment=Nheko - Matrix client
