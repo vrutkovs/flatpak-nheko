@@ -1,0 +1,21 @@
+From ec7739a80fef30949b1997d5d512f2a66b984bb5 Mon Sep 17 00:00:00 2001
+From: Vitaly Zaitsev <vitaly@easycoding.org>
+Date: Sat, 16 Dec 2017 18:20:43 +0100
+Subject: [PATCH 2/2] Remove rpath.
+
+---
+ CMakeLists.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 69daf7e..6943b6f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -344,3 +344,4 @@ if(UNIX AND NOT APPLE)
+             COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
+     endif()
+ endif()
++set_target_properties(nheko PROPERTIES SKIP_BUILD_RPATH TRUE)
+-- 
+2.14.3
+

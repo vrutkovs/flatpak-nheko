@@ -33,9 +33,6 @@
      "build-options" : {
         "cflags": "-O2 -g",
         "cxxflags": "-O2 -g",
-        "build-args": [
-          "--share=network"
-        ],
         "env": {
             "V": "1"
         }
@@ -59,14 +56,12 @@
             "name": "nheko",
             "buildsystem": "simple",
             "build-commands": [
+                "sed -i '/GIT_/d' cmake/*.cmake",
+                "sed -i 's@add_library(${LIBRARY_NAME} ${SRC})@add_library(${LIBRARY_NAME} STATIC ${SRC})@g' .third-party/matrix_structs/CMakeLists.txt",
+                "sed -i '/-Werror/d' .third-party/matrix_structs/cmake/CompilerFlags.cmake",
                 "cmake -H. -Bbuild -DCMAKE_BUILD_TYPE=Release",
                 "make -C build -j2"
             ],
-            "build-options": {
-              "build-args": [
-                "--share=network"
-              ]
-            },
             "post-install": [
                 "install -dm755 \"/app/bin\"",
                 "install -dm755 \"/app/share/pixmaps/\"",
@@ -84,7 +79,48 @@
             "sources": [
                  {
                     "type": "git",
-                    "url": "https://github.com/mujx/nheko.git"
+                    "url": "https://github.com/mujx/nheko.git",
+                    "branch": "8dc17ccecb55d1957f4b717829777d381e34ab85"
+                 },
+                 {
+                    "type": "git",
+                    "url": "https://github.com/bendiken/lmdbxx",
+                    "branch": "0b43ca87d8cfabba392dfe884eb1edb83874de02",
+                    "dest": ".third-party/lmdbxx"
+                 },
+                 {
+                    "type": "git",
+                    "url": "https://github.com/mujx/matrix-structs",
+                    "branch": "7d5d5f7d5f35bc27f168d0f9528844022232281c",
+                    "dest": ".third-party/matrix_structs"
+                 },
+                 {
+                    "type": "git",
+                    "url": "https://github.com/mobius3/tweeny",
+                    "branch": "b94ce07cfb02a0eb8ac8aaf66137dabdaea857cf",
+                    "dest": ".third-party/tweeny"
+                 },
+                 {
+                    "type": "patch",
+                    "path": "nheko-drop-flags.patch"
+                 },
+                 {
+                    "type": "patch",
+                    "path": "nheko-drop-rpath.patch"
+                 },
+                 {
+                    "type": "patch",
+                    "path": "nheko-skip-header-check.patch"
+                 },
+                 {
+                    "type": "file",
+                    "path": "json.hpp",
+                    "dest": ".third-party/matrix_structs/include"
+                 },
+                 {
+                    "type": "file",
+                    "path": "variant.hpp",
+                    "dest": ".third-party/matrix_structs/include"
                  }
             ]
         }
